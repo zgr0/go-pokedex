@@ -74,7 +74,7 @@ func commandmap() func() error {
 			limit.end = 5
 		}
 		for i := limit.start; i < limit.end; i++ {
-			if i== 21 {
+			if i == 21 {
 				continue
 			}
 			url := fmt.Sprintf("https://pokeapi.co/api/v2/location/%d/?limit=1&offset=0", i)
