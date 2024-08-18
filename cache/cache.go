@@ -41,7 +41,7 @@ func (c *cacheList) cacheGet(s string) ([]byte, bool) {
 	}
 }
 
-func (c *cacheList) repl(interval time.Duration)  {
+func (c *cacheList) cacheReap(interval time.Duration)  {
 	ticker:= time.NewTicker(interval)
 	defer ticker.Stop()
 	for range ticker.C {
