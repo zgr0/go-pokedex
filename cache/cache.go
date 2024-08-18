@@ -40,3 +40,18 @@ func (c *cacheList) cacheGet(s string) ([]byte, bool) {
 		return e.val, true
 	}
 }
+
+func (c *cacheList) repl(interval time.Duration)  {
+	ticker:= time.NewTicker(interval)
+	defer ticker.Stop()
+	for range ticker.C {
+		c.mux.Unlock()
+		for v, ok := range c.cacheMap {
+			if time.Since(ok.cacheTime) > interval {
+				delete(c.cacheMap , v) 	
+			}
+		}
+		c.mux.Lock()
+	}
+
+}
