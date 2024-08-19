@@ -14,11 +14,12 @@ type cacheList struct {
 	mux      *sync.Mutex
 }
 
-func newCache(t time.Duration) *cacheList {
+func newCache(interval time.Duration) *cacheList {
 	cache := &cacheList{
 		cacheMap: make(map[string]cache),
 		mux:      &sync.Mutex{},
 	}
+	go cache.cacheReap(interval)
 	return cache
 }
 func (c *cacheList) cacheAdd(s string, v []byte) {
