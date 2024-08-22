@@ -37,6 +37,14 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	if pageURL != nil {
 		url = *pageURL
 	}
+	if v, ok := c.cache.cacheGet(url); ok {
+		locations := RespShallowLocations{}
+		err := json.Unmarshal(v, RespShallowLocations{})
+		if err != nil {
+			return RespShallowLocations{}, err
+		}
+		return locations, nil
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -59,9 +67,10 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	if err != nil {
 		return RespShallowLocations{}, err
 	}
-
+	c.cache.cacheAdd(url, dat)
 	return locationsResp, nil
 }
+
 func commandMapf(cfg *config) error {
 	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {

@@ -18,6 +18,7 @@ type config struct {
 // Client -
 type Client struct {
 	httpClient http.Client
+	cache *cacheList
 }
 
 // NewClient -
@@ -26,6 +27,7 @@ func NewClient(timeout time.Duration) Client {
 		httpClient: http.Client{
 			Timeout: timeout,
 		},
+		cache:      &cacheList{cacheMap: make(map[string]cache)},
 	}
 }
 
@@ -62,7 +64,6 @@ func main() {
 			continue
 		}
 	}
-
 }
 func cleanInput(text string) []string {
 	output := strings.ToLower(text)
