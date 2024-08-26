@@ -43,8 +43,19 @@ func main() {
 		pokeapiClient: pokeClient,
 	}
 	reader := bufio.NewScanner(os.Stdin)
+	fmt.Println("                                  ,'\\")
+	fmt.Println("    _.----.        ____         ,'  _\\   ___    ___     ____")
+	fmt.Println("_,-'       `.     |    |  /`.   \\,-'    |   \\  /   |   |    \\  |`.")
+	fmt.Println("\\      __    \\    '-.  | /   `.  ___    |    \\/    |   '-.   \\ |  |")
+	fmt.Println(" \\.    \\ \\   |  __  |  |/    ,','_  `.  |          | __  |    \\|  |")
+	fmt.Println("   \\    \\/   /,' _`.|      ,' / / / /   |          ,' _`.|     |  |")
+	fmt.Println("    \\     ,-'/  /   \\    ,'   | \\/ / ,`.|         /  /   \\  |     |")
+	fmt.Println("     \\    \\ |   \\_/  |   `-.  \\    `'  /|  |    ||   \\_/  | |\\    |")
+	fmt.Println("      \\    \\ \\      /       `-.`.___,-' |  |\\  /| \\      /  | |   |")
+	fmt.Println("       \\    \\ `.__,'|  |`-._    `|      |__| \\/ |  `.__,'|  | |   |")
+	fmt.Println("        \\_.-'       |__|    `-._ |              '-.|     '-.| |   |")
 	for {
-		fmt.Println("pokedex> ")
+		fmt.Print("pokedex> ")
 		reader.Scan()
 		input := cleanInput(reader.Text())
 		if len(input) == 0 {

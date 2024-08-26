@@ -39,7 +39,7 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	}
 	if v, ok := c.cache.cacheGet(url); ok {
 		locations := RespShallowLocations{}
-		err := json.Unmarshal(v, RespShallowLocations{})
+		err := json.Unmarshal(v,locations)
 		if err != nil {
 			return RespShallowLocations{}, err
 		}
