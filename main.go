@@ -18,7 +18,7 @@ type config struct {
 // Client -
 type Client struct {
 	httpClient http.Client
-	cache *cacheList
+	cache      *cacheList
 }
 
 // NewClient -
@@ -27,14 +27,14 @@ func NewClient(timeout time.Duration) Client {
 		httpClient: http.Client{
 			Timeout: timeout,
 		},
-		cache:      &cacheList{cacheMap: make(map[string]cache)},
+		cache: &cacheList{cacheMap: make(map[string]cache)},
 	}
 }
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func main() {
@@ -61,11 +61,16 @@ func main() {
 		if len(input) == 0 {
 			continue
 		}
+		arg := []string{}
+		if len(input) > 1 {
+			arg = input[1:]
+		}
 		commandname := input[0]
 		fmt.Println(input[0])
+		fmt.Println(arg)
 		command, ok := getCommands()[commandname]
 		if ok {
-			err := command.callback(cfg)
+			err := command.callback(cfg, arg...)
 			if err != nil {
 				fmt.Println(err)
 			}

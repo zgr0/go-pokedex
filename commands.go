@@ -22,7 +22,7 @@ type RespShallowLocations struct {
 	} `json:"results"`
 }
 
-func commandHelp(cfg *config) error {
+func commandHelp(cfg *config, arg ...string) error {
 
 	fmt.Println("HELP!!!!")
 	for _, v := range getCommands() {
@@ -71,7 +71,44 @@ func (c *Client) ListLocations(pageURL *string) (RespShallowLocations, error) {
 	return locationsResp, nil
 }
 
-func commandMapf(cfg *config) error {
+func (c *Client) GetLocation(name string) (RespShallowLocations, error) {
+	url := baseURL + "/location-area/"+name
+	
+	if v, ok := c.cache.cacheGet(url); ok {
+		locations := RespShallowLocations{}
+		err := json.Unmarshal(v,locations)
+		if err != nil {
+			return RespShallowLocations{}, err
+		}
+		return locations, nil
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return RespShallowLocations{}, err
+	}
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return RespShallowLocations{}, err
+	}
+	defer resp.Body.Close()
+
+	dat, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return RespShallowLocations{}, err
+	}
+
+	locationsResp := RespShallowLocations{}
+	err = json.Unmarshal(dat, &locationsResp)
+	if err != nil {
+		return RespShallowLocations{}, err
+	}
+	c.cache.cacheAdd(url, dat)
+	return locationsResp, nil
+}
+
+func commandMapf(cfg *config,arg ...string) error {
 	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
@@ -86,7 +123,7 @@ func commandMapf(cfg *config) error {
 	return nil
 }
 
-func commandMapb(cfg *config) error {
+func commandMapb(cfg *config,arg ...string) error {
 	if cfg.prevLocationsURL == nil {
 		return errors.New("you're on the first page")
 	}
