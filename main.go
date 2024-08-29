@@ -66,8 +66,7 @@ func main() {
 			arg = input[1:]
 		}
 		commandname := input[0]
-		fmt.Println(input[0])
-		fmt.Println(arg)
+		
 		command, ok := getCommands()[commandname]
 		if ok {
 			err := command.callback(cfg, arg...)
@@ -117,6 +116,11 @@ func getCommands() map[string]cliCommand {
 			name:        "inspect",
 			description: "catch pokemon to your pokedex",
 			callback:    commandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "see your caught pokemons",
+			callback:    pokedex,
 		},
 	}
 }

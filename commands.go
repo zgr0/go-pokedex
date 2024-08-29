@@ -374,6 +374,13 @@ func commandHelp(cfg *config, arg ...string) error {
 	return nil
 
 }
+func pokedex(cfg *config, arg ...string) error {
+	fmt.Println("Your Pokedex:")
+	for _, v := range caught {
+		fmt.Printf("-%s \n", v.Name)
+	}
+	return nil
+}
 func commandCatch(cfg *config, args ...string) error {
 	if len(args) != 1 {
 		return errors.New("no pokemon specified")
